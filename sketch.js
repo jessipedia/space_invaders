@@ -8,6 +8,8 @@ var playerSpeed = 8;
 var invaders = [];
 var invader;
 var invadersNum = 5;
+var invaderSpeed = 2;
+var invaderReturn = false;
 
 
 function setup() {
@@ -28,7 +30,16 @@ function draw() {
   for (var i = 0; i < invaders.length; i++){
     invaders[i].show();
     invaders[i].move();
+    if (invaders[i].x + 60 > width || invaders[i].x < 0) {
+     invaderReturn = true;
+   }
   }
+
+if (invaderReturn){
+  for (var i = 0; i < invaders.length; i++){
+    invaders[i].advance();
+  }
+}
 
 }
 
@@ -37,17 +48,15 @@ function Invader(x, y){
   this.y = y;
   this.xdir = 1;
 
-  this.move = function(){
-    this.x = this.x + this.xdir;
 
-    if (invaders[invaders.length - 1].x + 60 > width){
-      console.log("return");
-      this.xdir = -1;
-      this.y = this.y + 30;
-    } else if (invaders[0].x === 0) {
-      this.xdir = 1;
-      this.y = this.y + 30;
-    }
+  this.move = function(){
+    this.x = this.x + invaderSpeed * this.xdir;
+  }
+
+  this.advance = function(){
+    this.xdir = this.xdir * -1;
+    this.y = this.y + 30;
+    invaderReturn = false;
   }
 
   this.show = function(){
